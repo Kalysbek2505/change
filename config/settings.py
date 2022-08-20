@@ -78,12 +78,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+from decouple import config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'db_change',
-        'PASSWORD': "1",
-        'USER': 'ertay',
+        'NAME':config('DB_NAME'),
+        'PASSWORD': config("PASSWORD"),
+        'USER': config('USER'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
