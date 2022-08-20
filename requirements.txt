@@ -5,3 +5,5 @@ python-decouple
 djangorestframework-simplejwt
 drf-yasg
 pillow
+djangorestframework-simplejwt
+
