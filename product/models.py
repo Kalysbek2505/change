@@ -16,7 +16,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="media")
 
     def __str__(self):
-        return self.name
+        return self.title
 
     @property
     def average_rating(self):
@@ -40,6 +40,8 @@ class Like(models.Model):
 
     def __str__(self):
         return f'LIKE TO Product: {self.product}  FROM USER: {self.user}'
+
+
 
 
 class Favoritos(models.Model):
