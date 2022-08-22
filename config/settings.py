@@ -57,6 +57,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+AUTH_USER_MODEL = 'accounts.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,8 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
 
         'NAME':config('DB_NAME'),
-        'PASSWORD': config("PASSWORD"),
-        'USER': config('USER'),
+        'PASSWORD': config("DB_PASSWORD"),
+        'USER': config('DB_USER'),
         'HOST': 'localhost',
         'PORT': '5432',
     }

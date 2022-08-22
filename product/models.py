@@ -39,17 +39,17 @@ class Like(models.Model):
     product = models.ForeignKey(Product, related_name='likes', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'LIKE TO ANIME: {self.anime}  FROM USER: {self.user}'
+        return f'LIKE TO Product: {self.product}  FROM USER: {self.user}'
 
 
 class Favoritos(models.Model):
     user = models.ForeignKey(User, related_name='favoritos', on_delete=models.CASCADE)
-    anime = models.ForeignKey(Product, related_name='favoritos', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='favoritos', on_delete=models.CASCADE)
 
 class Rating(models.Model):
     user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE)
-    anime = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE)
     value = models.IntegerField(choices=[(1,1), (2,2), (3,3), (4,4), (5,5)])
 
     def __str__(self):
-        return f'{self.user}: {self.anime}. Rating: {self.value}'
+        return f'{self.user}: {self.product}. Rating: {self.value}'
