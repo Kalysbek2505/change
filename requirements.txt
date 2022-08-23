@@ -6,4 +6,7 @@ djangorestframework-simplejwt
 drf-yasg
 pillow
 djangorestframework-simplejwt
-
+gunicorn
+whitenoise
+dj-database-url
+django-cors-headers

@@ -53,3 +53,9 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.product}. Rating: {self.value}'
+
+class Trade(models.Model):
+    user = models.ManyToManyField(User, related_name='changes')
+    # user1 = models.ManyToManyField(User, related_name='changes')
+    product = models.ManyToManyField(Product, related_name='changes')
+    # product1 = models.ManyToManyField(Product, related_name='changes')

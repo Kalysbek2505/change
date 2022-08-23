@@ -12,8 +12,8 @@ from rest_framework.response import Response
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
-from .models import Product, Category, Comment, Like, Rating, Favoritos
-from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer
+from .models import Product, Category, Comment, Like, Rating, Favoritos, Trade
+from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer, TradeSerializer
 from .permissions import IsAuthor
 
 
@@ -131,3 +131,13 @@ class FavoritosViewSet(mixins.ListModelMixin, GenericViewSet):
     def filter_queryset(self, queryset):
         new_queryset = queryset.filter(user=self.request.user)
         return new_queryset
+
+# api_view(['GET'])
+# def add_to_changing(request, p_id, u_id):
+#     user = request.user
+#     product = get_object_or_404(product, id=p_id)
+
+class TradeViewSet(ModelViewSet):
+    queryset = Trade.objects.all()
+    serializer_class = TradeSerializer
+    permission_classes = [IsAuthenticated]
