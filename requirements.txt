@@ -6,4 +6,11 @@ djangorestframework-simplejwt
 drf-yasg
 pillow
 djangorestframework-simplejwt
+<<<<<<< HEAD
 loguru
+=======
+gunicorn
+whitenoise
+dj-database-url
+django-cors-headers
+>>>>>>> origin

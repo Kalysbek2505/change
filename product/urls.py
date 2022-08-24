@@ -2,13 +2,14 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from django.views.decorators import cache
 
-from .views import ProductViewSet, CategoryViewSet, CommentViewSet, toggle_like, add_rating, add_to_favoritos, FavoritosViewSet
+from .views import ProductViewSet, CategoryViewSet, CommentViewSet, toggle_like, add_rating, add_to_favoritos, FavoritosViewSet, TradeViewSet
 
 router = DefaultRouter()
 router.register('product', (ProductViewSet))
 router.register('categories', CategoryViewSet)
 router.register('comments', CommentViewSet)
 router.register('favoritos', FavoritosViewSet)
+router.register('changings', TradeViewSet)
 
 
 urlpatterns = [
