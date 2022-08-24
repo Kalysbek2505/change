@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins, filters
 from rest_framework.decorators import action, api_view
+from loguru import logger
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -11,6 +12,8 @@ from rest_framework.response import Response
 
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+
+from config.settings import DEBUG
 
 from .models import Product, Category, Comment, Like, Rating, Favoritos
 from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer
@@ -33,7 +36,7 @@ class ProductViewSet(ModelViewSet):
 
     @swagger_auto_schema(manual_parameters=[openapi.Parameter('name', openapi.IN_QUERY, 'search Product by name', type=openapi.TYPE_STRING)])
 
-
+    
     @action(methods=['GET'], detail=False)
     def search(self, request):
         name = request.query_params.get('title')
@@ -44,7 +47,7 @@ class ProductViewSet(ModelViewSet):
         serializer = ProductSerializer(queryset, many=True, context={'request':request})
         return Response(serializer.data, 200)
 
-
+    logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
     @action(methods=['GET'], detail=False)
     def order_by_rating(self, request):
         queryset = self.paginate_queryset()
@@ -72,13 +75,14 @@ class CommentViewSet(mixins.CreateModelMixin,
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsAuthor]
 
+    logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
 
 
-
+logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
 @api_view(['GET'])
 def toggle_like(request, a_id):
     user = request.user
@@ -90,6 +94,7 @@ def toggle_like(request, a_id):
         Like.objects.create(user=user, product=product)
     return Response("Like toggled", 200)
 
+logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
 @api_view(['POST'])
 def add_rating(request, a_id):
     user = request.user
@@ -111,7 +116,7 @@ def add_rating(request, a_id):
 
     return Response('Rating created', 201)
 
-
+logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
 @api_view(['GET'])
 def add_to_favoritos(request, a_id):
     user = request.user
@@ -128,6 +133,9 @@ class FavoritosViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = FavoritosSerializer
     permission_classes = [IsAuthenticated, IsAuthor]
 
+    logger.add("queryset.log", format="{time} {level} {message}", level = "DEBUG", rotation= '16:00', serialize=True, backtrace=True, diagnose=True)
     def filter_queryset(self, queryset):
         new_queryset = queryset.filter(user=self.request.user)
         return new_queryset
+
+
