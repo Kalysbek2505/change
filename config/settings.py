@@ -50,11 +50,15 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'whitenoise.runserver_nostatic',
+    'django_celery_beat',
+    'django_celery_results',
 
     'product',
     'accounts',
 
 ]
+
+CELERY_RESULT_BACKEND = "django-db"
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -68,9 +72,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTHENTICATION_BACKENDS = (
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
+# AUTHENTICATION_BACKENDS = (
+#     "allauth.account.auth_backends.AuthenticationBackend",
+# )
 
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -215,6 +219,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
 
 
 CORS_ALLOW_ORIGINS = [

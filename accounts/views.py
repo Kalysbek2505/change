@@ -15,11 +15,11 @@ class RegisterAPIView(APIView):
             serializer.save()
             return Response('Аккаунт создан', 201)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def activate(request, activation_code):
     user = get_object_or_404(User, activation_code=activation_code)
     user.is_active = True
     user.activation_code = ''
     user.save()
     return redirect('http://127.0.0.1:3000/')
-    
+

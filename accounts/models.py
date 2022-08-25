@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-
+from .tasks import send_activation_code
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -57,17 +57,29 @@ class User(AbstractUser):
     objects = UserManager()
     
 
-    def generate_activation_code(self):
+    @staticmethod
+    def generate_activation_code():
         from django.utils.crypto import get_random_string
-        code = get_random_string(length=8, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-        self.activation_code = code
-        self.save()
+        code = get_random_string(8)
+        return code 
+
+    def set_activation_code(self):
+        code = self.generate_activation_code()
+        if User.objects.filter(activation_code=code).exists():
+            self.set_activation_code()
+        else:
+            self.activation_code = code
+            self.save()
+
+    def send_activation_code(self):
+        send_activation_code.delay(self.id)
 
     
-    def send_activation_code(self):
-        from django.core.mail import send_mail
-        self.generate_activation_code()
-        activation_url = f'http://127.0.0.1:8000/accounts/activate/{self.activation_code}'
-        message = f'Активируйте свой аккаунт, перейдя по этой ссылке {activation_url}'
-        send_mail('Активировать аккаунт', message, 'change@gmail.com', [self.email])
+
+    # def send_activation_code(self):
+    #     from django.core.mail import send_mail
+    #     self.generate_activation_code()
+    #     activation_url = f'http://127.0.0.1:8000/accounts/activate/{self.activation_code}'
+    #     message = f'Активируйте свой аккаунт, перейдя по этой ссылке {activation_url}'
+    #     send_mail('Активировать аккаунт', message, 'change@gmail.com', [self.email])
         

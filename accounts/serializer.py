@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-
+from .tasks import send_activation_code
 User = get_user_model()
 
 
@@ -26,5 +26,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs 
 
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+    # def create(self, validated_data):
+    #     return User.objects.create_user(**validated_data)
+
+    def save(self):
+        data = self.validated_data
+        user = User.objects.create_user(**data)
+        user.send_activation_code()
