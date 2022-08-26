@@ -7,6 +7,14 @@ from loguru import logger
 import os
 import logging
 
+from django.views.generic import TemplateView
+
+
+
+class Home(TemplateView):
+    template_name = "home.html"
+
+
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.response import Response

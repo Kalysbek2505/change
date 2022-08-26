@@ -32,4 +32,4 @@ class RegisterSerializer(serializers.ModelSerializer):
     def save(self):
         data = self.validated_data
         user = User.objects.create_user(**data)
-        user.send_activation_code()
+        user.set_activation_code()

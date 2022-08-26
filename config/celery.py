@@ -15,7 +15,7 @@ app = Celery("config")
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # загрузка tasks.py в приложение django
-app.autodiscover_tasks()
+# app.autodiscover_tasks()
 
 
 

@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-
+from product import views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -36,7 +36,8 @@ urlpatterns = [
     path('docs/', schema_view.with_ui("swagger")),
     path('changing/', include('product.urls')),
     path('accounts/', include('accounts.urls')),
-    path("accounts/", include("allauth.urls")),
+    path("account/", include("allauth.urls")),
+    path("", views.Home.as_view(), name="home"),
 ]
 
 
