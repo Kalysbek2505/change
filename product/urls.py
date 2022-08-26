@@ -4,7 +4,7 @@ from django.urls import path, include
 from .views import ProductViewSet, CategoryViewSet, CommentViewSet, toggle_like, add_rating, add_to_favoritos, FavoritosViewSet
 
 router = DefaultRouter()
-router.register('product', ProductViewSet)
+router.register('product', (ProductViewSet))
 router.register('categories', CategoryViewSet)
 router.register('comments', CommentViewSet)
 router.register('favoritos', FavoritosViewSet)

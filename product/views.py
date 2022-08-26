@@ -1,10 +1,11 @@
-
-from unicodedata import category
 from django.http import QueryDict
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins, filters
 from rest_framework.decorators import action, api_view
+from loguru import logger
+import os
+import logging
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -16,7 +17,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from .models import Product, Category, Comment, Like, Rating, Favoritos
 from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer
 from .permissions import IsAuthor
-
 
 
 class ProductViewSet(ModelViewSet):
@@ -32,6 +32,7 @@ class ProductViewSet(ModelViewSet):
         context['request'] = self.request
         return context
 
+
     @swagger_auto_schema(manual_parameters=[openapi.Parameter('category', openapi.IN_QUERY, 'recommendations by categories', type=openapi.TYPE_STRING, required=True)])
     @action(methods=['GET'], detail=False)
     def recommendation(self, request):
@@ -42,7 +43,10 @@ class ProductViewSet(ModelViewSet):
         serializer = ProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data, 200)
 
-    @swagger_auto_schema(manual_parameters=[openapi.Parameter('name', openapi.IN_QUERY, 'search Product by name', type=openapi.TYPE_STRING)])
+    # @swagger_auto_schema(manual_parameters=[openapi.Parameter('name', openapi.IN_QUERY, 'search Product by name', type=openapi.TYPE_STRING)])
+
+    
+
     @action(methods=['GET'], detail=False)
     def search(self, request):
         name = request.query_params.get('title')
@@ -53,7 +57,7 @@ class ProductViewSet(ModelViewSet):
         serializer = ProductSerializer(queryset, many=True, context={'request':request})
         return Response(serializer.data, 200)
 
-
+   
     @action(methods=['GET'], detail=False)
     def order_by_rating(self, request):
         queryset = self.paginate_queryset()
@@ -84,6 +88,7 @@ class CommentViewSet(mixins.CreateModelMixin,
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsAuthor]
 
+    
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
@@ -101,6 +106,7 @@ def toggle_like(request, a_id):
     else:
         Like.objects.create(user=user, product=product)
     return Response("Like toggled", 200)
+
 
 @api_view(['POST'])
 def add_rating(request, a_id):
@@ -121,10 +127,6 @@ def add_rating(request, a_id):
     else:
         Rating.objects.create(user=user,product=product, value=value)
 
-    return Response('Rating created', 201)
-
-
-@api_view(['GET'])
 def add_to_favoritos(request, a_id):
     user = request.user
     product = get_object_or_404(product, id=a_id)
@@ -135,30 +137,39 @@ def add_to_favoritos(request, a_id):
         Favoritos.objects.create(user=user, product=product)
     return Response("added to favoritos", 200)
 
+
 class FavoritosViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = Favoritos.objects.all()
     serializer_class = FavoritosSerializer
     permission_classes = [IsAuthenticated, IsAuthor]
 
+   
     def filter_queryset(self, queryset):
         new_queryset = queryset.filter(user=self.request.user)
         return new_queryset
 
-# api_view(['GET'])
-# def add_to_changing(request, p_id, u_id):
-#     user = request.user
-#     product = get_object_or_404(product, id=p_id)
-
-
-
-# @api_view(['GET'])
-# def sort_for_usr(request, p_id):
-#     user = request.user
-#     product = get_object_or_404(product, id=p_id)
 
 
 
 
 
 
+
+
+# class TradeViewSet(ModelViewSet):
+#     queryset = Trade.objects.all()
+#     serializer_class = TradeSerializer
+#     permission_classes = [IsAuthenticated]
+
+
+log = logger.__getattribute__('log')
+
+def index(request):
+    log.warning('Message for Warning')
+    log.error('Message for Error')
+    log.critical('Message for critical problem')
+    log.information('Message for information')
+    log.debug('Message for debug')
+    return render(request, 'product/index.html')
+    
 

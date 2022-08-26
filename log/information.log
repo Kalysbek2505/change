@@ -1,0 +1,4 @@
+INFO 2022-08-25 12:12:32,939 autoreload autoreload.py Watching for file changes with StatReloader
+INFO 2022-08-25 12:12:40,767 autoreload autoreload.py /home/id0809/xacaton/change/config/settings.py changed, reloading.
+INFO 2022-08-25 12:12:41,518 autoreload autoreload.py Watching for file changes with StatReloader
+INFO 2022-08-25 12:12:45,336 autoreload autoreload.py /home/id0809/xacaton/change/config/settings.py changed, reloading.
