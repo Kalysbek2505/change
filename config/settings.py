@@ -255,11 +255,17 @@ LOGGING = {
     
     'loggers': {
         'log':{
-            'handlers': ['main', 'file'],
+            'handlers': ['main'],
             'level': 'INFO', 
             'propagate': True,
-        }
+        },
+        'log2': {
+        'handlers': ['file'],
+        'level': 'ERROR',
+        'propagate': False
+
+
         
     }
 }
-        
+}
