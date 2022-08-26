@@ -10,4 +10,7 @@ gunicorn
 whitenoise
 dj-database-url
 django-cors-headers
-loguru
+celery==4.4.7
+redis
+django-celery-beat
+django-celery-results

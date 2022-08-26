@@ -36,6 +36,7 @@ urlpatterns = [
     path('docs/', schema_view.with_ui("swagger")),
     path('changing/', include('product.urls')),
     path('accounts/', include('accounts.urls')),
+    path("accounts/", include("allauth.urls")),
 ]
 
 

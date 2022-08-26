@@ -39,7 +39,9 @@ class Like(models.Model):
     product = models.ForeignKey(Product, related_name='likes', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'LIKE TO ANIME: {self.product}  FROM USER: {self.user}'
+        return f'LIKE TO Product: {self.product}  FROM USER: {self.user}'
+
+
 
 
 class Favoritos(models.Model):

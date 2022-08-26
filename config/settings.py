@@ -27,6 +27,7 @@ DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
@@ -37,14 +38,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     "django.contrib.sites",  # new
+    # 3rd party
+    "allauth", # new
+    "allauth.account", # new
+    "allauth.socialaccount", # new
+    # social providers
+    "allauth.socialaccount.providers.github", # new
+
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
     'whitenoise.runserver_nostatic',
+    'django_celery_beat',
+    'django_celery_results',
 
     'product',
     'accounts',
+
 ]
+
+CELERY_RESULT_BACKEND = "django-db"
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -58,9 +72,22 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# AUTHENTICATION_BACKENDS = (
+#     "allauth.account.auth_backends.AuthenticationBackend",
+# )
+
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_ON_GET = True
+
 ROOT_URLCONF = 'config.urls'
 
+
+
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 TEMPLATES = [
     {
@@ -88,26 +115,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-
         'NAME':config('DB_NAME'),
         'PASSWORD': config("DB_PASSWORD"),
         'USER': config('DB_USER'),
         'HOST': 'localhost',
         'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql'
+
     }
-}
-
-# import dj_database_url
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql'
-#     }
-# } 
-# db = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db)
-
-# AUTH_USER_MODEL = 'accounts.User'
-
+} 
+import dj_database_url
+db = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db)
 
 
 # Password validation
@@ -188,6 +207,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
 
 
 CORS_ALLOW_ORIGINS = [
