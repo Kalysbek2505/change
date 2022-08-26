@@ -1,4 +1,5 @@
 
+from unicodedata import category
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
@@ -12,8 +13,8 @@ from rest_framework.response import Response
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
-from .models import Product, Category, Comment, Like, Rating, Favoritos, Trade
-from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer, TradeSerializer
+from .models import Product, Category, Comment, Like, Rating, Favoritos
+from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, FavoritosSerializer
 from .permissions import IsAuthor
 
 
@@ -31,9 +32,17 @@ class ProductViewSet(ModelViewSet):
         context['request'] = self.request
         return context
 
+    @swagger_auto_schema(manual_parameters=[openapi.Parameter('category', openapi.IN_QUERY, 'recommendations by categories', type=openapi.TYPE_STRING, required=True)])
+    @action(methods=['GET'], detail=False)
+    def recommendation(self, request):
+        cat_title = request.query_params.get('category')
+        categories = Category.objects.get(title__icontains=cat_title)
+        queryset = self.get_queryset()
+        queryset = queryset.filter(categories=categories)
+        serializer = ProductSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, 200)
+
     @swagger_auto_schema(manual_parameters=[openapi.Parameter('name', openapi.IN_QUERY, 'search Product by name', type=openapi.TYPE_STRING)])
-
-
     @action(methods=['GET'], detail=False)
     def search(self, request):
         name = request.query_params.get('title')
@@ -52,6 +61,8 @@ class ProductViewSet(ModelViewSet):
         serializer = ProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data, 200)
 
+    
+
 
 
 class CategoryViewSet(mixins.CreateModelMixin, 
@@ -61,6 +72,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
 
 
 
@@ -137,7 +149,16 @@ class FavoritosViewSet(mixins.ListModelMixin, GenericViewSet):
 #     user = request.user
 #     product = get_object_or_404(product, id=p_id)
 
-class TradeViewSet(ModelViewSet):
-    queryset = Trade.objects.all()
-    serializer_class = TradeSerializer
-    permission_classes = [IsAuthenticated]
+
+
+# @api_view(['GET'])
+# def sort_for_usr(request, p_id):
+#     user = request.user
+#     product = get_object_or_404(product, id=p_id)
+
+
+
+
+
+
+

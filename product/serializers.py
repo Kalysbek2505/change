@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Comment, Category, Rating, Like, Favoritos, Trade
+from .models import Product, Comment, Category, Rating, Like, Favoritos
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -48,8 +48,3 @@ class FavoritosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favoritos
         exclude = ['user']
-
-class TradeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Trade
-        fields = '__all__'
