@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 
 from .models import Product, Comment, Category, Rating, Like, Favoritos
 
@@ -48,3 +49,8 @@ class FavoritosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favoritos
         exclude = ['user']
+
+class TradeSerializer(serializers.Serializer):
+    user1 = serializers.IntegerField()
+    user2 = serializers.IntegerField()
+    product1 = get_object_or_404

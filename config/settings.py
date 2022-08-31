@@ -226,48 +226,38 @@ CORS_ALLOW_ORIGINS = [
 
 
 import logging
+import os
 
-
-
-
+# DataFlair #Logging Information
 LOGGING = {
     'version': 1,
+    # Version of logging
     'disable_existing_loggers': False,
-
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {filename} {message}',
-            'style': '{',
-        
-        },
-    },
-
-    
-    'handlers':{
-        'main': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
+    #disable logging 
+    # Handlers #############################################################
+    'handlers': {
         'file': {
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(BASE_DIR, 'log/information.log')
-        }
-    },
-    
-    'loggers': {
-        'log':{
-            'handlers': ['main'],
-            'level': 'INFO', 
-            'propagate': True,
+            'filename': 'dataflair-debug.log',
         },
-        'log2': {
-        'handlers': ['file'],
-        'level': 'ERROR',
-        'propagate': False
+########################################################################
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    # Loggers ####################################################################
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
+        },
+    },
+}
 
 
-        
-    }
-}
-}
+
+
+

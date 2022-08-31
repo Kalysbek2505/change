@@ -164,20 +164,12 @@ class FavoritosViewSet(mixins.ListModelMixin, GenericViewSet):
 
 
 
+
 # class TradeViewSet(ModelViewSet):
 #     queryset = Trade.objects.all()
 #     serializer_class = TradeSerializer
 #     permission_classes = [IsAuthenticated]
 
 
-log = logger.__getattribute__('log')
 
-def index(request):
-    log.warning('Message for Warning')
-    log.error('Message for Error')
-    log.critical('Message for critical problem')
-    log.information('Message for information')
-    log.debug('Message for debug')
-    return render(request, 'product/index.html')
-    
 
